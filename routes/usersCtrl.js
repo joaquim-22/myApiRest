@@ -99,10 +99,10 @@ module.exports = {
                 attributes: ['id', 'lastName', 'firstName', 'email', 'role'],
                 where: { id: id }
               })
-              .then(function (userFound) {
+              .then((userFound) => {
                 done(null, userFound);
               })
-              .catch(function(err) {
+              .catch((err) => {
                 return res.status(400).json({ 'error': 'unable to verify user' });
               });
             },
@@ -114,7 +114,7 @@ module.exports = {
                   email: (email ? email : userFound.email),
                   role: (role ? role : userFound.role)
                 })
-                .then(() => {
+                .then((userFound) => {
                   done(userFound);
                 })
                 .catch((err) => {
