@@ -7,7 +7,8 @@ exports.router = (() => {
     const apiRouter = express.Router();
 
     //Routes
-    apiRouter.route('/users').post(usersCtrl.addUser)
+    apiRouter.route('/addUser/').post(usersCtrl.addUser)
+    apiRouter.route('/updateUser/:id').put(usersCtrl.updateUser)
 
 
     return apiRouter;

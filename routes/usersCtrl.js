@@ -82,7 +82,54 @@ module.exports = {
                 return res.status(400).json({ 'error': 'An error occurred'})
             }
         })
+    },
 
+    updateUser: (req, res) => {
 
+        let id = req.params.id;
+        let lastName = req.body.lastName;
+        let firstName = req.body.firstName;
+        let email = req.body.email;
+        let role = req.body.role;
+
+        asyncLib.waterfall([
+            (done) => {
+              models.User.findOne({
+                attributes: ['id', 'lastName', 'firstName', 'email', 'role'],
+                where: { id: id }
+              })
+              .then(function (userFound) {
+                done(null, userFound);
+              })
+              .catch(function(err) {
+                return res.status(400).json({ 'error': 'unable to verify user' });
+              });
+            },
+            (userFound, done) => {
+              if(userFound) {
+                userFound.update({
+                  lastName: (lastName ? lastName : userFound.lastName),
+                  firstName: (firstName ? firstName : userFound.firstName),
+                  email: (email ? email : userFound.email),
+                  role: (role ? role : userFound.role)
+                })
+                .then(() => {
+                  done(userFound);
+                })
+                .catch((err) => {
+                  res.status(400).json({ 'error': 'An error occurred' });
+                });
+              }
+              else {
+                res.status(404).json({ 'error': 'An error occurred' });
+              }
+            },
+          ], (userFound) => {
+            if (userFound) {
+              return res.status(201).json(userFound);
+            } else {
+              return res.status(400).json({ 'error': 'An error occurred' });
+            }
+          });
     }
 }
