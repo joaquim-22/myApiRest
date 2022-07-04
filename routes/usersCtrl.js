@@ -131,5 +131,62 @@ module.exports = {
               return res.status(400).json({ 'error': 'An error occurred' });
             }
           });
+    },
+
+    deleteUser: (req, res) => {
+        let id = req.params.id;
+
+        asyncLib.waterfall([
+            (done) => {
+                models.User.destroy({
+                    where: { id: id }
+                })
+                .then((userFound) => {
+                    done(userFound)
+                })
+                .catch((err) => {
+                    return res.status(400).json({ 'error': 'An error occurred' });
+                });
+            }],
+            (userFound) => {
+                if (userFound) {
+                    return res.status(200).json({'success':`User ${id} successfuly deleted`})
+                }
+                else {
+                    return res.status(404).json({ 'error': 'User was not found' });
+                }
+            });
+    },
+
+    getUser: (req, res) => {
+        let id = req.params.id;
+
+        models.User.findOne({
+            attributes: [ 'id', 'lastName', 'firstName', 'email', 'password', 'role' ],
+            where: { id: id }
+        })
+        .then((user) => {
+            if (user) {
+                res.status(200).json(user);
+            }
+            else {
+                res.status(400).json({ 'error': 'user not found' });
+            }
+        })
+        .catch((err) => {
+            res.status(400).json({ 'error': 'An error occurred' });
+        });
+    },
+
+    getAllUsers: (req, res) => {
+        models.User.findAll({
+            attributes: [ 'id', 'lastName', 'firstName', 'email', 'role' ]
+        })
+        .then((users) => {
+            res.status(200).json(users)
+        })
+        .catch((err) => {
+            res.status(400).json({ 'error': 'An error occurred' });
+        });
     }
 }
