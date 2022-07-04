@@ -38,7 +38,7 @@ module.exports = {
                     done(null, userFound)
                 })
                 .catch((err) => {
-                    return res.status(500).json({'error': 'Impossible to verify user'})
+                    return res.status(409).json({'error': 'An error occurred'})
                 })
             },
             (userFound, done) => {
@@ -63,7 +63,7 @@ module.exports = {
                     done(newUser)
                 })
                 .catch((err) => {
-                    return res.status(500).json({'error': 'cannot add user'})
+                    return res.status(400).json({'error': 'An error occurred'})
                 })
             },
             (newUser) => {
@@ -71,7 +71,7 @@ module.exports = {
                     return res.status(201).json({'success': 'user successfuly created'})
                 }
                 else {
-                    return res.status(500).json({ 'error': 'cannot add user'})
+                    return res.status(400).json({ 'error': 'An error occurred'})
                 }
             }
         ], (newUser) => {
@@ -79,10 +79,10 @@ module.exports = {
                 return res.status(201).json({'success': 'user successfuly created'})
             }
             else {
-                return res.status(500).json({ 'error': 'cannot add user'})
+                return res.status(400).json({ 'error': 'An error occurred'})
             }
         })
 
-        
+
     }
 }
