@@ -57,7 +57,7 @@ module.exports = {
                     firstName: firstName,
                     email: email,
                     password: bcryptedPassword,
-                    role: 0
+                    role: role
                 })
                 .then((newUser) => {
                     done(newUser)
@@ -91,6 +91,7 @@ module.exports = {
         let firstName = req.body.firstName;
         let email = req.body.email;
         let role = req.body.role;
+
 
         asyncLib.waterfall([
             (done) => {
