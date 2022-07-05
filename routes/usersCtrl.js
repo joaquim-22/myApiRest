@@ -53,6 +53,7 @@ module.exports = {
                 }
             },
             (userFound, bcryptedPassword, done) => {
+                
                 let newUser = models.User.create({
                     lastName: lastName,
                     firstName: firstName,
@@ -88,39 +89,41 @@ module.exports = {
 
         asyncLib.waterfall([
             (done) => {
-              models.User.findOne({
-                attributes: ['id', 'lastName', 'firstName', 'email', 'role'],
-                where: { id: userId }
-              })
-              .then((userFound) => {
-                done(null, userFound);
-              })
-              .catch((err) => {
-                return res.status(400).json({ 'error': 'unable to verify user' });
-              });
+                models.User.findOne({
+                    attributes: ['id', 'lastName', 'firstName', 'email', 'role'],
+                    where: { id: userId }
+                })
+                .then((userFound) => {
+                    done(null, userFound);
+                })
+                .catch((err) => {
+                    return res.status(400).json({ 'error': 'Unable to verify user' });
+                });
             },
             (userFound, done) => {
               if(userFound) {
                 userFound.update({
-                  lastName: (lastName ? lastName : userFound.lastName),
-                  firstName: (firstName ? firstName : userFound.firstName),
-                  role: (role ? role : userFound.role)
+                    lastName: (lastName ? lastName : userFound.lastName),
+                    firstName: (firstName ? firstName : userFound.firstName),
+                    role: (role ? role : userFound.role)
                 })
                 .then((userFound) => {
-                  done(userFound);
+                    done(userFound);
                 })
                 .catch((err) => {
-                  res.status(400).json({ 'error': 'An error occurred' });
+                    res.status(400).json({ 'error': 'An error occurred' });
                 });
               }
               else {
                 res.status(404).json({ 'error': 'An error occurred' });
               }
             },
-          ], (userFound) => {
+          ], 
+          (userFound) => {
             if (userFound) {
-              return res.status(201).json(userFound);
-            } else {
+                res.status(200).json({'success': 'User successfuly modified'})
+            } 
+            else {
               return res.status(400).json({ 'error': 'An error occurred' });
             }
           });
@@ -144,7 +147,7 @@ module.exports = {
             }],
             (userFound) => {
                 if (userFound) {
-                    return res.status(200).json({'success':`User ${userId} successfuly deleted`})
+                    return res.status(200).json({'success':`User successfuly deleted`})
                 }
                 else {
                     return res.status(404).json({ 'error': 'User was not found' });
@@ -213,17 +216,19 @@ module.exports = {
           },
           (userFound, done) => {
             if (userFound) {
-              bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt) {
+              bcrypt.compare(password, userFound.password, (errBycrypt, resBycrypt) => {
                 done(null, userFound, resBycrypt);
               });
-            } else {
+            } 
+            else {
               return res.status(404).json({ 'error': 'user not exist in DB' });
             }
           },
           (userFound, resBycrypt, done) => {
             if(resBycrypt) {
               done(userFound);
-            } else {
+            } 
+            else {
               return res.status(403).json({ 'error': 'invalid password' });
             }
           }
@@ -234,7 +239,8 @@ module.exports = {
               'id': userFound.id,
               'token': jwtUtils.generateTokenForUser(userFound)
             });
-          } else {
+          } 
+          else {
             return res.status(500).json({ 'error': 'cannot log on user' });
           }
         });
