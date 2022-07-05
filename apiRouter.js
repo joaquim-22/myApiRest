@@ -8,10 +8,11 @@ exports.router = (() => {
 
     //Routes
     apiRouter.route('/addUser/').post(usersCtrl.addUser);
-    apiRouter.route('/updateUser/:id').put(usersCtrl.updateUser);
-    apiRouter.route('/deleteUser/:id').delete(usersCtrl.deleteUser);
-    apiRouter.route('/user/:id').get(usersCtrl.getUser);
-    apiRouter.route('/users').get(usersCtrl.getAllUsers);
+    apiRouter.route('/updateUser/').put(usersCtrl.updateUser);
+    apiRouter.route('/deleteUser/').delete(usersCtrl.deleteUser);
+    apiRouter.route('/user/').get(usersCtrl.getUser);
+    apiRouter.route('/users/').get(usersCtrl.getAllUsers);
+    apiRouter.route('/login/').post(usersCtrl.login)
 
 
     return apiRouter;
