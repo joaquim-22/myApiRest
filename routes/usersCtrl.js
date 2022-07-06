@@ -155,7 +155,7 @@ module.exports = {
             });
     },
 
-    getUser: (req, res) => {
+    getUserMe: (req, res) => {
         let headerAuth = req.headers['authorization']
         let userId = jwtUtils.getUserId(headerAuth)
     
@@ -180,6 +180,26 @@ module.exports = {
           });
       },
 
+      getUser: (req, res) => {
+        let userId = req.params.id
+    
+        models.User.findOne({
+            attributes: [ 'id', 'firstName', 'lastName', 'email', 'role' ],
+            where: { id: userId }
+          })
+          .then((user) => {
+            if (user) {
+              res.status(201).json(user);
+            }
+            else {
+              res.status(404).json({ 'error': 'user not found' });
+            }
+          })
+          .catch((err) => {
+            res.status(500).json({ 'error': 'cannot fetch user' });
+          });
+      },  
+
     getAllUsers: (req, res) => {
         models.User.findAll({
             attributes: [ 'id', 'lastName', 'firstName', 'email', 'role' ]
@@ -192,7 +212,7 @@ module.exports = {
         });
     },
 
-    login: function(req, res) {
+    login: (req, res) => {
     
         // Params
         var email    = req.body.email;
@@ -207,10 +227,10 @@ module.exports = {
             models.User.findOne({
                 where: { email: email }
             })
-            .then(function(userFound) {
+            .then((userFound) => {
                 done(null, userFound);
             })
-            .catch(function(err) {
+            .catch((err) => {
                 return res.status(500).json({ 'error': 'unable to verify user' });
             });
           },

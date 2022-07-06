@@ -19,6 +19,6 @@ server.get('/', (req, res) => {
 //Router Api
 server.use('/api/', apiRouter);
 
-server.listen(4000, () => {
+server.listen(5000, () => {
     console.log('Server running')
 })

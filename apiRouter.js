@@ -10,7 +10,8 @@ exports.router = (() => {
     apiRouter.route('/addUser/').post(usersCtrl.addUser);
     apiRouter.route('/updateUser/').put(usersCtrl.updateUser);
     apiRouter.route('/deleteUser/').delete(usersCtrl.deleteUser);
-    apiRouter.route('/user/').get(usersCtrl.getUser);
+    apiRouter.route('/user/me').get(usersCtrl.getUserMe);
+    apiRouter.route('/user/:id').get(usersCtrl.getUser);
     apiRouter.route('/users/').get(usersCtrl.getAllUsers);
     apiRouter.route('/login/').post(usersCtrl.login)
 
