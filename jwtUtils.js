@@ -21,7 +21,7 @@ module.exports = {
 
     getUserId: (authorization) => {
     
-        var userId = -1;
+        var userId = -1; //Default value for security
         var token = module.exports.parseAuthorization(authorization);
 
         if(token != null) {
